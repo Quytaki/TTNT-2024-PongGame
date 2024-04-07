@@ -15,7 +15,7 @@ def waitForPlayerToPressKey(): # nhấn phím để tiếp tục, trừ khi nh�
                     terminate()
                 return
 
-def drawText(text, font, surface, x, y): # vẽ và định vị văn bản 
+def drawText(text, font, surface, x, y): # vẽ và định vị 
     textobj = font.render(text, 1, WHITE)
     textrect = textobj.get_rect()
     textrect.centerx = x
@@ -23,7 +23,7 @@ def drawText(text, font, surface, x, y): # vẽ và định vị văn bản
     surface.blit(textobj, textrect)
 
 def rectCollideSide(a, b): # cho hai hình chữ nhật (a) và (b)
-                           # xác định cạnh của (b) hình chữ nhật đó (a) chạm vào khi (a) & (b) chồng lên nhau hoặc va chạm
+                           # xác định điểm (b) của hình chữ nhật đó (a) chạm vào khi (a) & (b) chồng lên nhau hoặc va chạm
     if abs(a.right-b.left) < abs(a.left-b.right): 
         if abs(a.bottom-b.top) < abs(a.top-b.bottom): 
             if abs(a.right-b.left) > abs(a.bottom-b.top):
@@ -49,7 +49,7 @@ def rectCollideSide(a, b): # cho hai hình chữ nhật (a) và (b)
 
 def ballTrajectory(x1, y1, y2, ballDir, windowWidth): # cho tọa độ bắt đầu x1 y1, tọa độ kết thúc y2, hướng bóng và chiều rộng cửa sổ
                                                       # về tọa độ kết thúc x2 khi máy dùng thanh trượt
-                                                      # giả định rằng quả bóng chỉ nảy lên khi ra khỏi tường tối đa và quả bóng di chuyển cùng một khoảng cách theo hướng x và y
+                                                      # giả định rằng quả bóng chỉ nảy lên khi ra khỏi tường và quả bóng di chuyển cùng một khoảng cách theo hướng x và y
 
     dy = abs(y2-y1)
     dx = dy
@@ -71,7 +71,7 @@ def ballTrajectory(x1, y1, y2, ballDir, windowWidth): # cho tọa độ bắt đ
         else:
             return x_offset
 
-def randomReturn(vDir): # given vertical direction, returns random horizontal direction for ball
+def randomReturn(vDir): # hướng dọc cho trước, trả về hướng ngang ngẫu nhiên cho quả bóng
 
     if vDir == 'UP':
         if random.randint(0,1) == 0:
@@ -84,14 +84,14 @@ def randomReturn(vDir): # given vertical direction, returns random horizontal di
         else:
             ball['dir'] = DOWNLEFT
 
-def resetPaddles(): # resets paddles to center
+def resetPaddles(): # đặt lại paddles về giữa
 
     pTop = {'rect':pygame.Rect(PADDLETOP_LEFT, PADDLETOP_TOP, PADDLEWIDTH, PADDLEHEIGHT), 'color':GREEN}
     pBot = {'rect':pygame.Rect(PADDLEBOTTOM_LEFT, PADDLEBOTTOM_TOP, PADDLEWIDTH, PADDLEHEIGHT), 'color':GREEN}
     return pTop, pBot
 
 # set up pygame
-pygame.mixer.pre_init(44100, -16, 1, 512) # needed to remove sound delays
+pygame.mixer.pre_init(44100, -16, 1, 512) # loại bỏ độ trễ âm thanh
 pygame.init()
 mainClock = pygame.time.Clock()
 
@@ -114,52 +114,52 @@ pongSound = pygame.mixer.Sound('pongsound.wav')
 winSound = pygame.mixer.Sound('gamewin.wav')
 loseSound = pygame.mixer.Sound('gamelose.flac')
 
-# set up direction variables 
+#  thiết lập các biến hướng
 DOWNLEFT = 1 
 DOWNRIGHT = 3
 UPLEFT = 7
 UPRIGHT = 9
 
-# set up movement variables
+# biến di chuyển
 moveLeft = moveRight = moveDown = moveUp = False
 
-# set up serve direction variables
+# set up biến giao bóng
 serveLeft = serveRight = False
 
-# set up paddle and ball sizes
+# set up chiều rộng thanh trượt và bóng
 PADDLEWIDTH = 50
 PADDLEHEIGHT = 10
 BALLWIDTH = 10
 
-# set up paddle + ball move speed (pixels moved per iteration)
+# set up tốc độ thanh trượt và bóng
 PADDLESPEED = 4
 BALLSPEED = 4
 
-# set up bottom paddle, controlled by player
+# set up thanh trượt dưới ( người )
 PADDLEBOTTOM_LEFT = WINDOWWIDTH/2 - PADDLEWIDTH/2 
 PADDLEBOTTOM_TOP = 9*WINDOWHEIGHT/10 - PADDLEHEIGHT
 
-# set up top paddle, controlled by computer
+# set up thanh trượt trên ( máy)
 PADDLETOP_LEFT = WINDOWWIDTH/2- PADDLEWIDTH/2 
 PADDLETOP_TOP = WINDOWHEIGHT/10 
 
-# show start screen
+# màn hình khởi động
 drawText('PONG!', font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2)-25)
 drawText('Nhan bat ki de bat dau.', font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2)+25)
 pygame.display.update()
 waitForPlayerToPressKey()
     
-# run loop
+# chạy vòng lập chính
 while True:
 
-    # set (or reset) scores
+    # reset điểm số về 0
     playerScore = 0
     computerScore = 0
 
-    # set up or reset paddles 
+    # set up và reset paddles
     paddleTop, paddleBottom = resetPaddles()
 
-    # blank out screen
+    # màn hình trống
     windowSurface.fill(BLACK)
 
     # select paddle
@@ -169,17 +169,17 @@ while True:
     pygame.draw.rect(windowSurface, paddleTop['color'], paddleTop['rect'])
     pygame.display.update()
     while True:
-        pressedKeys = pygame.key.get_pressed() # giant array of 1s and 0s with each specific space assigned towards key state
-        if pressedKeys[49] == 1: # 1 is pressed
+        pressedKeys = pygame.key.get_pressed() # "Cấu trúc mảng lớn gồm các số 1 và 0 với mỗi không gian cụ thể được gán cho trạng thái khóa tương ứng"
+        if pressedKeys[49] == 1: # 1 được chọn
             playerIsTopPaddle = True
             break
-        if pressedKeys[50] == 1: # 2 is pressed
+        if pressedKeys[50] == 1: # 2 được chọn 
             playerIsTopPaddle = False
             break
         else:
-            waitForPlayerToPressKey() # if any other key is pressed, does not enter infinite while loop
+            waitForPlayerToPressKey() # ngăn chặn việc vào vòng lập vô hạn
 
-    # set up ball
+    # setup bóng (*)4
     ball = {'rect':pygame.Rect(WINDOWWIDTH/2-BALLWIDTH/2, WINDOWHEIGHT/2-BALLWIDTH/2, BALLWIDTH, BALLWIDTH), 'color':WHITE, 'dir':DOWNLEFT}
     if playerIsTopPaddle:
         ball['rect'].midtop = paddleTop['rect'].midbottom
@@ -188,10 +188,10 @@ while True:
         ball['rect'].midbottom = paddleBottom['rect'].midtop
         randomReturn('UP')
 
-    # blank out screen
+    # màn hình trống
     windowSurface.fill(BLACK)
     
-    # show which paddle goes first screen
+    # hiện thị thanh chọn để giao bóng (*)5
     drawText('Bạn giao bóng.', font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2)-25)
     drawText('bấm bất kì để giao bóng.', font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2)+25)
     pygame.draw.rect(windowSurface, paddleBottom['color'], paddleBottom['rect'])
@@ -199,20 +199,20 @@ while True:
     pygame.display.update()
     waitForPlayerToPressKey()
 
-    # run gameplay loop
+    # run gameplay loop (vòng lặp trò chơi. *6)
     while True:
 
-        # serve ball boolean
+        # đưa biến giao bóng về false để giao bóng
         serveBall = False
 
-        # draw black background onto surface
+        # vẽ nền đen
         windowSurface.fill(BLACK)
  
-        # check for events
+        # kiểm tra sự kiện
         for event in pygame.event.get():
             if event.type == QUIT:
                 terminate()
-            if event.type == KEYDOWN: # a key is pressed
+            if event.type == KEYDOWN: # một phím được nhấn
                 if event.key == K_LEFT:
                     moveRight = False
                     moveLeft = True
@@ -231,7 +231,7 @@ while True:
                 if event.key == ord('d'):
                     serveRight = False
                     serveLeft = True
-            if event.type == KEYUP: # a key is released
+            if event.type == KEYUP: # một phím được giữ ( a = 97)(d=100)
                 if event.key == K_ESCAPE:
                     pygame.quit()
                     sys.exit()
@@ -248,7 +248,7 @@ while True:
                 if event.key == ord('d'):
                     serveRight = False
         
-        # move ball data structure
+        # cách mà bóng di chuyển
         if ball['dir'] == DOWNLEFT: 
             ball['rect'].left -= BALLSPEED 
             ball['rect'].top += BALLSPEED 
@@ -262,21 +262,21 @@ while True:
             ball['rect'].left += BALLSPEED
             ball['rect'].top -= BALLSPEED
 
-        # ball bounces off left side
+        # bóng bật sang trái
         if ball['rect'].left < 0:
             if ball['dir'] == DOWNLEFT:
                 ball['dir'] = DOWNRIGHT
             if ball['dir'] == UPLEFT: 
                 ball['dir'] = UPRIGHT
 
-        # ball bounces off right side
+        # bóng bật sang phải
         if ball['rect'].right > WINDOWWIDTH:
             if ball['dir'] == DOWNRIGHT:
                 ball['dir'] = DOWNLEFT
             if ball['dir'] == UPRIGHT: 
                 ball['dir'] = UPLEFT
 
-        # ball hits bottom - top paddle gets point, reset 
+        # bóng chạm dưới - top paddle được điểm, reset(8)
         if ball['rect'].bottom > WINDOWHEIGHT:
             if playerIsTopPaddle:
                 playerScore += 1
@@ -289,7 +289,7 @@ while True:
             if not playerIsTopPaddle: 
                 randomReturn('DOWN')
 
-        # ball hits top - bottom paddle gets point, reset 
+        # bóng chạm trên - bottom paddle được điểm, reset
         if ball['rect'].top < 0:
             if not playerIsTopPaddle:
                 playerScore += 1
@@ -302,16 +302,16 @@ while True:
             if playerIsTopPaddle:
                 randomReturn('UP')
                     
-        # player + computer movement if player is top paddle
+        # người + máy di chuyển nếu người chơi là thanh trượt trên(9)
         if playerIsTopPaddle:
 
-            # player is top
+            # người chơi ở trên
             if moveLeft and paddleTop['rect'].left > 0:
                 paddleTop['rect'].left -= PADDLESPEED
             if moveRight and paddleTop['rect'].right < WINDOWWIDTH:
                 paddleTop['rect'].right += PADDLESPEED
 
-            # computer is bottom
+            # máy ở dưới
             if ball['dir'] == DOWNRIGHT or ball['dir'] == DOWNLEFT:
                 returnPosition = ballTrajectory(ball['rect'].centerx, ball['rect'].centery, paddleBottom['rect'].bottom, ball['dir'], WINDOWWIDTH)
                 if returnPosition < paddleBottom['rect'].centerx and paddleBottom['rect'].left > 0:
@@ -319,16 +319,16 @@ while True:
                 if returnPosition > paddleBottom['rect'].centerx and paddleBottom['rect'].right < WINDOWWIDTH:
                     paddleBottom['rect'].centerx += PADDLESPEED
 
-        # player + computer movement if player is bottom paddle
+        # người + máy di chuyển nếu người chơi là thanh trượt dưới
         else:
 
-            # player is bottom
+            # người chơi ở dưới
             if moveLeft and paddleBottom['rect'].left > 0:
                 paddleBottom['rect'].left -= PADDLESPEED
             if moveRight and paddleBottom['rect'].right < WINDOWWIDTH:
                 paddleBottom['rect'].right += PADDLESPEED
 
-            # computer is top
+            # máy ở trên
             if ball['dir'] == UPRIGHT or ball['dir'] == UPLEFT:
                 returnPosition = ballTrajectory(ball['rect'].centerx, ball['rect'].centery, paddleTop['rect'].bottom, ball['dir'], WINDOWWIDTH)
                 if returnPosition < paddleTop['rect'].centerx and paddleTop['rect'].left > 0:
@@ -336,19 +336,19 @@ while True:
                 if returnPosition > paddleTop['rect'].centerx and paddleTop['rect'].right < WINDOWWIDTH:
                     paddleTop['rect'].centerx += PADDLESPEED
         
-        # code that applies to both paddles
+        # kiểm tra va chạm giữa thanh trượt và bóng ( cho cả hai thanh trượt 10*)
         for paddle in [paddleTop, paddleBottom]: 
 
-            # ball collides with paddle
+            # va chạm giữa thanh trượt và bóng
             if ball['rect'].colliderect(paddle['rect']):
 
-                # play pong sound
+                # phát âm thanh va chạm
                 pongSound.play()
                 
-                # collision + redirection of ball if player is top paddle
+                # va chạm + đổi hướng bóng nếu người chơi là thanh trượt trên
                 if playerIsTopPaddle:
                     
-                    # player is top paddle, ball collides with bottom - redirect based on player movement
+                    # Người chơi ở trên, bóng va chạm với phía dưới - chuyển hướng dựa trên chuyển động của người chơi
                     if rectCollideSide(ball['rect'], paddle['rect']) == 'BOTTOM': 
                         if ball['dir'] == UPLEFT:
                             if moveRight == True: 
@@ -361,15 +361,15 @@ while True:
                             else: 
                                 ball['dir'] = DOWNRIGHT
 
-                    # computer is bottom paddle, ball collides with top - randomize return
+                    # máy ở dưới - bóng va chạm với phía trên - trả về ngẫu nhiên
                     if rectCollideSide(ball['rect'], paddle['rect']) == 'TOP':
                         if ball['dir'] == DOWNLEFT or ball['dir'] == DOWNRIGHT:
                             randomReturn('UP')
                             
-                # collision + redirection of ball if player is bottom paddle
+                # va chạm + đổi hướng bóng nếu người chơi là thanh trượt dưới
                 else:
 
-                    # player is bottom paddle, ball collides with top - redirect based on player movement
+                    # người chơi ở dưới, bóng va chạm với phía trên - chuyển hướng dựa trên chuyển động của người chơi
                     if rectCollideSide(ball['rect'], paddle['rect']) == 'TOP':
                         if ball['dir'] == DOWNLEFT:
                             if moveRight == True: 
@@ -382,47 +382,47 @@ while True:
                             else: 
                                 ball['dir'] = UPRIGHT
 
-                    # computer is top paddle, ball collides with bottom - randomize return
+                    # máy ở trên - bóng va chạm với phía dưới - trả về ngẫu nhiên
                     if rectCollideSide(ball['rect'], paddle['rect']) == 'BOTTOM':
                         if ball['dir'] == UPLEFT or ball['dir'] == UPRIGHT:
                             randomReturn('DOWN')
                         
-                # bounce if ball hits left of paddle
+                # nảy lên nếu bóng chạm vào phía trái của thanh trượt(11*)
                 if rectCollideSide(ball['rect'], paddle['rect']) == 'LEFT':
                     if ball['dir'] == DOWNRIGHT:
                         ball['dir'] = DOWNLEFT
                     if ball['dir'] == UPRIGHT:
                         ball['dir'] = UPLEFT
 
-                # bounce if ball hits right of paddle
+                # nảy lên nếu bóng chạm vào phía phải của thanh trượt
                 if rectCollideSide(ball['rect'], paddle['rect']) == 'RIGHT':
                     if ball['dir'] == DOWNLEFT:
                         ball['dir'] = DOWNRIGHT
                     if ball['dir'] == UPLEFT:
                         ball['dir'] = UPRIGHT
                         
-            # draw paddle onto surface
+            # vẽ thanh trượt
             pygame.draw.rect(windowSurface, paddle['color'], paddle['rect'])
 
-        # draw ball onto surface
+        # vẽ bóng
         pygame.draw.rect(windowSurface, ball['color'], ball['rect'])
 
-        # break if score for one paddle is 5
+        # dừng nếu người chơi hoặc máy đạt 5 điểm
         if playerScore == 5 or computerScore == 5:
             break
 
-        # draw scores
+        # vẽ điểm số
         drawText('%s - %s' %(playerScore, computerScore), font, windowSurface, WINDOWWIDTH/2, WINDOWHEIGHT/2)
 
-        # pause if point is scored and serve is done
+        # dừng nếu bóng được giao
         if serveBall:
             pygame.time.delay(2000)
 
-        # draw window onto screen
+        # vẽ màn hình
         pygame.display.update()
         mainClock.tick(100)
 
-    # check who won game
+    # kiểm tra điểm số cuối cùng
     if playerScore == 5:
         endSound = winSound
         endMessage = 'Thắng!'
@@ -430,9 +430,9 @@ while True:
         endSound = loseSound
         endMessage = 'Thua!'
 
-    # game over
+    # hiển thị màn hình kết thúc
     endSound.play()
-    drawText('GAME OVER. YOU %s' %(endMessage), font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2)-50)
+    drawText('hết game. Bạn %s' %(endMessage), font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2)-50)
     drawText('%s - %s' %(playerScore, computerScore), font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2))
     drawText('Nhấn phím bất kì để bắt đầu lại.', font, windowSurface, (WINDOWWIDTH/2), (WINDOWHEIGHT/2)+50)
     pygame.display.update()
