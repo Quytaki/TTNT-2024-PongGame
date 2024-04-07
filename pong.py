@@ -231,7 +231,7 @@ while True:
                 if event.key == ord('d'):
                     serveRight = False
                     serveLeft = True
-            if event.type == KEYUP: # một phím được giữ ( a = 97)(d=100)
+            if event.type == KEYUP: # một phím được thả ( a = 97)(d=100)
                 if event.key == K_ESCAPE:
                     pygame.quit()
                     sys.exit()
